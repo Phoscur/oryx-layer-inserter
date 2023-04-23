@@ -1,0 +1,23 @@
+query myLayouts {
+  myLayouts {
+    ...UserLayoutData
+    __typename
+  }
+}
+
+fragment UserLayoutData on MyLayout {
+  title
+  hashId
+  createdAt
+  geometry
+  privacy
+  revisions {
+    title
+    hashId
+    createdAt
+    qmkVersion
+    hasTour
+    __typename
+  }
+  __typename
+}

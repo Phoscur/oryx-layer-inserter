@@ -1,0 +1,33 @@
+{
+  "name": "oryx-layer-inserter",
+  "version": "1.0.0",
+  "description": "GraphQL Mesh for the Oryx API",
+  "main": "index.js",
+  "scripts": {
+    "start": "mesh dev",
+    "build": "mesh build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Phoscur/oryx-layer-inserter.git"
+  },
+  "keywords": [
+    "oryx",
+    "graphql-mesh"
+  ],
+  "author": "Phoscur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Phoscur/oryx-layer-inserter/issues"
+  },
+  "homepage": "https://github.com/Phoscur/oryx-layer-inserter#readme",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "@graphql-mesh/runtime": "^0.46.24",
+    "@graphql-mesh/cli": "^0.82.33",
+    "@graphql-mesh/graphql": "^0.34.17",
+    "graphql": "^16.6.0"
+  }
+}

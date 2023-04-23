@@ -1,0 +1,13 @@
+sources:
+  - name: OryxLayouts
+    handler:
+      graphql:
+        endpoint: https://oryx.zsa.io/graphql
+        operationHeaders:
+          Authorization: Bearer {env.TOKEN}
+
+serve:
+  browser: false
+  
+documents:
+  - ./src/**/*.graphql
