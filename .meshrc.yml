@@ -11,3 +11,7 @@ serve:
   
 documents:
   - ./src/**/*.graphql
+
+sdk:
+  generateOperations:
+    selectionSetDepth: 3 # This is the maximum level of selection set

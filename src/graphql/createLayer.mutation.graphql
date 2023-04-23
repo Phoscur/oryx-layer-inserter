@@ -1,0 +1,11 @@
+mutation createLayer($keys: Json!, $revisionHashId: String!, $position: Int!, $title: String) {
+  createLayer(
+    newKeys: $keys
+    revisionHashId: $revisionHashId
+    position: $position
+    title: $title
+  ) {
+    hashId
+    __typename
+  }
+}

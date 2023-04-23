@@ -1,0 +1,6 @@
+mutation setKey($hashId: String!, $key: Json!, $position: Int!) {
+  updateKey(hashId: $hashId, keyData: $key, position: $position) {
+    status
+    __typename
+  }
+}
