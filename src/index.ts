@@ -1,5 +1,5 @@
 import { getMeshSDK } from "../.mesh";
-import MyLayoutSdk from "./Layout";
+import MyLayoutSdk, { LayerSdk } from "./Layout";
 import prompts from "prompts";
 import storage from "node-persist";
 prompts.override(require('yargs').argv);
@@ -45,20 +45,8 @@ async function selectLayouts(myLayouts: MyLayoutSdk[]): Promise<{
   ]);
 }
 
-(async function main() {
-  await storage.init({ dir: "storage" });
-  const values = await storage.values();
-  console.log(values.length > 0 ? `Found & using cached layouts!` : `Layout Cache is empty.`);
-  const sdk = getMeshSDK();
-  // TODO refresh storage on demand & timeout?
-  const myLayouts = await (values.length > 0 ? MyLayoutSdk.fromStorage(sdk) : MyLayoutSdk.getMine(sdk));
-  console.log(`Found myLayouts (${myLayouts.length}):`); 
-  for (const l of myLayouts) {
-    console.log(`- ${l}\n`);
-  }
-  const { layout, source } = await selectLayouts(myLayouts);
-
-  const response = await prompts([
+async function selectLayer(source: MyLayoutSdk): Promise<{layer: LayerSdk}> {
+  return prompts([
     {
       type: 'select',
       name: 'layer',
@@ -70,27 +58,29 @@ async function selectLayouts(myLayouts: MyLayoutSdk[]): Promise<{
       }))
     }
   ]);
+}
 
-  console.log(`Selected Layer: ${response.layer}`);
+(async function main() {
+  await storage.init({ dir: "storage" });
+  const values = await storage.values();
+  console.log(values.length > 0 ? `Found & using cached layouts!` : `Layout Cache is empty.`);
+  const sdk = getMeshSDK();
+  // TODO? refresh storage on demand & timeout
+  const myLayouts = await (values.length > 0 ? MyLayoutSdk.fromStorage(sdk) : MyLayoutSdk.getMine(sdk));
+  console.log(`Found myLayouts (${myLayouts.length}):`); 
+  for (const l of myLayouts) {
+    console.log(`- ${l}`);
+  }
+  const { layout, source } = await selectLayouts(myLayouts);
 
-  //const revisionHashId = myLayouts[0].revisions[0].hashId, layerCount = myLayouts[0].revisions[0].layers.length;
-  //console.log(myLayouts[0].title, "latest revision hash", revisionHashId);
-  // console.log("layer 5", myLayouts[0].revisions[0].layers[5]);
-  /*const variables = {
-    keys: [],
-    position: 5,
-    revisionHashId: "66RPR",
-    title: "Layer",
-  };*/
-  //const layout = new OryxLayout(sdk);
-  //const mine = myLayouts[0];
-  // TODO check if it has the correct hash & if lastRevisionCompiled / isLatestRevision
-  //const l = await layout.createLayer(revisionHashId, layerCount, 'Test');
-  //const position = 6;
-  //const l = await mine.getNewLayer('UwU', position);
-  //console.log("Created Layer:", layerCount, l.hashId, );
+  const { layer } = await selectLayer(source);
+
+  console.log(`Selected Layer: ${layer}`);
+
+  const revision = layout.data.revisions[0];
+  // TODO? check if it has the correct hash & if lastRevisionCompiled / isLatestRevision
+  const l = await layout.createLayer(revision.hashId, revision.layers.length, layer.data.keys, layer.data.title);
+  console.log("Created Layer:", revision.layers.length, l.hashId);
   //const customLabel = "A", code = "KC_A";
-  //hashId = mine.data.revisions[0].layers[position].hashId;
-  //const layer = new OryxLayoutLayer(hashId, sdk);
   //console.log(customLabel, code, await l.setKey(code, 26, "AAA"));
 })();
